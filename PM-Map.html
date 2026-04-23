@@ -9,7 +9,7 @@
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-o9N1j7kGStpU46h1JLkB0zY1tIGbM4N1ZC5x0i0pGhY="
+    integrity="sha256-sA+e2YJbE0u7m0kYtTi27C3l2qCk0wzS2wpoSgZ8M+8="
     crossorigin=""
   />
 
@@ -19,9 +19,7 @@
       padding: 0;
       height: 100%;
       width: 100%;
-      font-family: Arial, sans-serif;
     }
-
     #map {
       height: 100%;
       width: 100%;
@@ -36,21 +34,18 @@
   <!-- Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o8Ee1k3bQwA1ITP0Z8cRk2KyyE+3C1r6C5x0i0pGhY="
-    crossorigin="">
-  </script>
+    integrity="sha256-o9N1jLkG1R9E2+VgYkC1vZ1tcHTfbvO5Sp3pA6xof+g="
+    crossorigin=""
+  ></script>
 
   <script>
-    // Initialiser kortet
-    const map = L.map('map').setView([56.162939, 10.203921], 6); // Danmark (Aarhus)
+    const map = L.map('map').setView([56.162939, 10.203921], 6);
 
-    // OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap-bidragsydere',
-      maxZoom: 19
+      maxZoom: 19,
+      attribution: '© OpenStreetMap bidragsydere'
     }).addTo(map);
   </script>
 
 </body>
 </html>
-``
