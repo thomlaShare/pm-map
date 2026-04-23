@@ -2,50 +2,31 @@
 <html lang="da">
 <head>
   <meta charset="utf-8">
-  <title>PM Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaflet Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-sA+e2YJbE0u7m0kYtTi27C3l2qCk0wzS2wpoSgZ8M+8="
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
-  />
-
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-    }
-    #map {
-      height: 100%;
-      width: 100%;
-    }
+}
   </style>
 </head>
 
 <body>
-
   <div id="map"></div>
 
   <!-- Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o9N1jLkG1R9E2+VgYkC1vZ1tcHTfbvO5Sp3pA6xof+g="
+    integrity="sha256-o9N1j/csuAEr1v9tbkGkP8w2RkLcNbfA0Ns0KZp2JZU="
     crossorigin=""
-  ></script>
-
-  <script>
-    const map = L.map('map').setView([56.162939, 10.203921], 6);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+ tps://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '© OpenStreetMap bidragsydere'
+      attribution: '© OpenStreetMap contributors'
     }).addTo(map);
   </script>
-
 </body>
 </html>
