@@ -2,14 +2,24 @@
 <html lang="da">
 <head>
   <meta charset="utf-8">
-  <title>PM Map – Leaflet</title>
+  <title>PM Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet CSS -->
-  <link rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"ght: 100%;
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
       margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
     }
+
     #map {
       height: 100%;
       width: 100%;
@@ -22,13 +32,76 @@
   <div id="map"></div>
 
   <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js<script>
-    const map = L.map('map').setView([56.162939, 10.203921], 6);
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    /*************************************************
+     * 1) INITIALISER LEAFLET-KORT
+     *************************************************/
+    const map = L.map('map').setView(
+      [56.162939, 10.203921], // Danmark
+      6
+    );
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+
+    /*************************************************
+     * 2) SHAREPOINT REST ENDPOINT (MapView)
+     *    - Read-only
+     *************************************************/
+    const sharePointUrl =
+      "https://tdc.sharepoint.com/sites/MobileFieldService/" +
+      "_api/web/lists(guid'01D89745-9941-40F1-B943-402D01F2384F')" +
+      "/items?$select=Title,Latitude,Longitude,InspectionStatus";
+
+    /*************************************************
+     * 3) HENT DATA FRA SHAREPOINT
+     *************************************************/
+    fetch(sharePointUrl, {
+      headers: {
+        "Accept": "application/json;odata=nometadata"
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("HTTP-fejl fra SharePoint: " + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      renderMarkers(data.value);
+    })
+    .catch(error => {
+      console.error("Fejl ved hentning af SharePoint-data:", error);
+    });
+
+    /*************************************************
+     * 4) RENDER MARKERS
+     *************************************************/
+    function renderMarkers(items) {
+      items.forEach(item => {
+
+        const lat = parseFloat(item.Latitude);
+        const lon = parseFloat(item.Longitude);
+
+        // Spring over hvis koordinater mangler
+        if (isNaN(lat) || isNaN(lon)) {
+          return;
+        }
+
+        const title = item.Title || "Ukendt site";
+        const status = item.InspectionStatus || "Ingen status";
+
+        L.marker([lat, lon])
+          .addTo(map)
+          .bindPopup(
+            `<strong>${title}</strong><br>Status: ${status}`
+          );
+      });
+    }
   </script>
 
 </body>
