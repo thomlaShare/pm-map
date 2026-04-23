@@ -5,10 +5,8 @@
   <title>PM Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <style>
     html, body {
@@ -22,6 +20,7 @@
     }
   </style>
 </head>
+
 <body>
 
 <div id="map"></div>
@@ -29,39 +28,37 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-  /******** 1) INIT MAP ********/
+  /* ========= 1) INIT MAP ========= */
   const map = L.map('map').setView([56.162939, 10.203921], 6);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: "© OpenStreetMap contributors"
+    attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  /******** 2) SHAREPOINT ENDPOINT ********/
+  /* ========= 2) SHAREPOINT URL (FORCE JSON) ========= */
   const sharePointUrl =
-    "https://tdc.sharepoint.com/sites/MobileFieldService/" +
-    "_api/web/lists(guid'01D89745-9941-40F1-B943-402D01F2384F')" +
-    "/items?$select=SiteName,Latitude,Longitude,InspectionStatus";
+    "https://tdc.sharepoint.com/sites/MobileFieldService" +
+    "/_api/web/lists(guid'01D89745-9941-40F1-B943-402D01F2384F')" +
+    "/items?$select=SiteName,Latitude,Longitude,InspectionStatus" +
+    "&$top=5000" +
+    "&$format=json";
 
-  /******** 3) FETCH WITH CREDENTIALS ********/
+  /* ========= 3) FETCH ========= */
   fetch(sharePointUrl, {
-    credentials: "include",
-    headers: {
-      "Accept": "application/json;odata=nometadata"
-    }
+    credentials: "include"
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("SharePoint HTTP-fejl: " + response.status);
-    }
-    return response.json();
+  .then(res => {
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return res.json();
   })
   .then(data => {
-    addMarkers(data.value);
+    console.log("Items hentet:", data.d.results.length);
+    addMarkers(data.d.results);
   })
-  .catch(err => console.error("SharePoint fetch fejl:", err));
+  .catch(err => console.error("SharePoint‑fejl:", err));
 
-  /******** 4) ADD MARKERS ********/
+  /* ========= 4) MARKERS ========= */
   function addMarkers(items) {
     items.forEach(item => {
 
@@ -84,4 +81,3 @@
 
 </body>
 </html>
-``
